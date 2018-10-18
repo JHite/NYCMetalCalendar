@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "NYCMetalCalendar", "NYCMetalCalendar\NYCMetalCalendar.pyproj", "{6B1DACF3-493F-40E3-B2B6-DFC0FCC32EE2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B1DACF3-493F-40E3-B2B6-DFC0FCC32EE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B1DACF3-493F-40E3-B2B6-DFC0FCC32EE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7BA527DE-14F1-4FE1-9BEF-4AB893C58644}
+	EndGlobalSection
+EndGlobal
