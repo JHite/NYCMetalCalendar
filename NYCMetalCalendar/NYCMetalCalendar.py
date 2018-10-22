@@ -1,5 +1,6 @@
 import requests
 import dateparser
+import os
 from bs4 import BeautifulSoup
 
 #####               Variables Begin                   ######
@@ -16,7 +17,9 @@ monthsOfYear =  ['Jan',
               'Nov',
               'Dec']
 
-icalFileLocation = "C:\Users\jhite\source\repos\NYCMetalCalendar\ical\nycmetalscene.ical"
+icalFileLocationWin32 = "C:\Users\jhite\source\repos\NYCMetalCalendar\ical\nycmetalscene.ical"
+icalFileLocationMacOS = "\Users\jhite\Programming\ical\nycmetalscene\"
+
 iCalHeading = "BEGIN:VCALENDAR \n VERSION:2.0 \n PRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN"
 
 iCalEventBegin = "BEGIN:VEVENT"
@@ -45,7 +48,7 @@ showData = {}
 def wrapEvent(showData, File):
     f = open(File, "w+")
     f.write(iCalEventBegin.encode("ASCII"))
-	f.write(icalCreated + )(Convert-MilliToZulu $now) 
+	f.write(icalCreated + )
 	iCalDescription + $clEvent.description + $iCalDescriptionLink + $clEvent.eventUrl| Out-File -encoding ASCII -append $dest
 	$iCaldtEnd + (Convert-MilliToZulu $clEvent.endDateTime) | Out-File -encoding ASCII -append $dest
 	$iCaldtStamp + (Convert-MilliToZulu $now)| Out-File -encoding ASCII -append $dest
