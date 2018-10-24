@@ -1,6 +1,6 @@
 import requests
 import dateparser
-import os
+import os.path
 from unidecode import unidecode
 from bs4 import BeautifulSoup
 
@@ -18,10 +18,10 @@ monthsOfYear =  ['Jan',
               'Nov',
               'Dec']
 
-#iCalFileLocationWin32 = "C:\Users\jhite\source\repos\NYCMetalCalendar\ical\nycmetalscene.ical"
+iCalFileLocationWin32 = "C:/Users/jhite/source/repos/NYCMetalCalendar/ical/nycmetalscene.ical"
 #iCalFileLocationMacOS = "\Users\jhite\Programming\ical\nycmetalscene\"
 
-iCalHeading = "BEGIN:VCALENDAR \n VERSION:2.0 \n PRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN"
+iCalHeading = "BEGIN:VCALENDAR \nVERSION:2.0 \nPRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN"
 
 iCalEventBegin = "BEGIN:VEVENT"
 iCalEventEnd = "END:VEVENT"
@@ -45,25 +45,21 @@ todaysDateData = {"date" : dateparser.parse('today')}
 ###                     Variables End                  ###
 
 #TODO:
-#create a function to convert normal date entries into zulu time
-#add time to Created, dtEnd, dtStamp,dtStart
-#strip location from link and add to location field
 #figure out file location differences between OSs
 
-def wrapEvent(showData, File):
-    f = open(File, "w+")
-    f.write(iCalEventBegin.encode("ASCII"))
-    f.write((icalCreated + printShowDataDateZulu(todaysDateData)).encode("ASCII"))
-    f.write((iCalDescription + showData["text"] + iCalDescriptionLink + showData["link"]).encode("ASCII"))
-    f.write(iCaldtEnd.encode("ASCII"))
-    f.write(icaldtStamp.encode("ASCII"))
-    f.write(iCaldtStart.encode("ASCII"))
-    f.write(icalLocation.encode("ASCII"))
-    f.write(iCalSequence.encode("ASCII")) 
-    f.write((iCalSummary + showData["text"]).encode("ASCII"))
-    f.write((iCalUid + showData["link"]).encode("ASCII"))
-    f.write((iCalUrl + showData["link"]).encode("ASCII"))
-    f.write(iCalEventEnd.encode("ASCII"))
+def wrapEvent(showData, f):
+    f.write(iCalEventBegin + '\n')
+    f.write((iCalCreated + printShowDataDateZulu(todaysDateData)) + '\n')
+    f.write((iCalDescription + showData["text"] + iCalDescriptionLink + showData["link"]) + '\n')
+    f.write(iCaldtEnd + printShowDataDateZulu(showData) + '\n')
+    f.write(iCaldtStamp + printShowDataDateZulu(showData) + '\n')
+    f.write(iCaldtStamp + printShowDataDateZulu(showData) + '\n')
+    f.write(iCalLocation + showData["loc"] + '\n')
+    f.write(iCalSequence + '\n') 
+    f.write(iCalSummary + showData["text"] + '\n')
+    f.write(iCalUid + showData["link"] + '\n')
+    f.write(iCalUrl + showData["link"] + '\n')
+    f.write(iCalEventEnd + '\n')
 
 def wrapEventConsole(showData):
     print(iCalEventBegin.encode("ASCII"))
@@ -85,6 +81,7 @@ def printShowDataDateZulu(date):
     return str(date["date"].year) + str(date["date"].month) + str(date["date"].day) + "T000000Z"
 
 def main():
+    
     page = requests.get("http://nycmetalscene.com/")
     soup = BeautifulSoup(page.text, 'html.parser')
 
@@ -112,6 +109,8 @@ def main():
 
     #print (icalCount)
 def test():
+    f = open(iCalFileLocationWin32, "w+")
+    f.write(iCalHeading + '\n')
     page = requests.get("http://nycmetalscene.com/")
     newPage = page.text.replace("Thurs.","Thu.")
     newSoup = BeautifulSoup(newPage, "html.parser")
@@ -136,7 +135,9 @@ def test():
                             showData["link"] = p.a['href']
                         
             
-                    wrapEventConsole(showData)
+                    wrapEvent(showData, f)
+    f.write(iCalFooter)
+    f.close()
 test()
 
 
