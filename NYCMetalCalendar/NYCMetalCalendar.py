@@ -48,18 +48,18 @@ todaysDateData = {"date" : dateparser.parse('today')}
 #figure out file location differences between OSs
 
 def wrapEvent(showData, f):
-    f.write(iCalEventBegin + '\n')
-    f.write((iCalCreated + printShowDataDateZulu(todaysDateData)) + '\n')
-    f.write((iCalDescription + showData["text"] + iCalDescriptionLink + showData["link"]) + '\n')
-    f.write(iCaldtStart + printShowDataDateZulu(showData) + '\n')
-    f.write(iCaldtEnd + printShowDataDateZulu(showData) + '\n')
-    f.write(iCaldtStamp + printShowDataDateZulu(showData) + '\n')
-    f.write(iCalLocation + showData["loc"] + '\n')
-    f.write(iCalSequence + '\n') 
-    f.write(iCalSummary + showData["text"] + '\n')
-    f.write(iCalUid + showData["link"] + '\n')
-    f.write(iCalUrl + showData["link"] + '\n')
-    f.write(iCalEventEnd + '\n')
+    f.write((iCalEventBegin + '\r\n').encode('ascii'))
+    f.write(((iCalCreated + printShowDataDateZulu(todaysDateData)) + '\r\n').encode('ascii'))
+    f.write(((iCalDescription + showData["text"] + iCalDescriptionLink + showData["link"]) + '\r\n').encode('ascii'))
+    f.write((iCaldtStart + printShowDataDateZulu(showData) + '\r\n').encode('ascii'))
+    f.write((iCaldtEnd + printShowDataDateZulu(showData) + '\r\n').encode('ascii'))
+    f.write((iCaldtStamp + printShowDataDateZulu(showData) + '\r\n').encode('ascii'))
+    f.write((iCalLocation + showData["loc"] + '\r\n').encode('ascii'))
+    f.write((iCalSequence + '\r\n').encode('ascii')) 
+    f.write((iCalSummary + showData["text"] + '\r\n').encode('ascii'))
+    f.write((iCalUid + showData["link"] + '\r\n').encode('ascii'))
+    f.write((iCalUrl + showData["link"] + '\r\n').encode('ascii'))
+    f.write((iCalEventEnd + '\r\n').encode('ascii'))
 
 def wrapEventConsole(showData):
     print(iCalEventBegin.encode("ASCII"))
@@ -117,8 +117,8 @@ def main():
 
     #print (icalCount)
 def test():
-    f = open(iCalFileLocationWin32, "w+")
-    f.write(iCalHeading + '\n')
+    f = open(iCalFileLocationWin32, "wb+")
+    f.write((iCalHeading + '\r\n').encode('ascii'))
     page = requests.get("http://nycmetalscene.com/")
     newPage = page.text.replace("Thurs.","Thu.")
     newSoup = BeautifulSoup(newPage, "html.parser")
@@ -145,8 +145,9 @@ def test():
                         
             
                     wrapEvent(showData, f)
-    f.write(iCalFooter)
+    f.write((iCalFooter).encode('ascii'))
     f.close()
 test()
 
 
+  
