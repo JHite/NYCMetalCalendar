@@ -18,7 +18,7 @@ monthsOfYear =  ['Jan',
               'Nov',
               'Dec']
 
-iCalFileLocationWin32 = "C:/Users/jhite/source/repos/NYCMetalCalendar/ical/nycmetalscene.ical"
+iCalFileLocationWin32 = "C:/Users/jhite/source/repos/NYCMetalCalendar/ical/nycmetalscene.ics"
 #iCalFileLocationMacOS = "\Users\jhite\Programming\ical\nycmetalscene\"
 
 iCalHeading = "BEGIN:VCALENDAR \nVERSION:2.0 \nPRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN"
@@ -51,8 +51,8 @@ def wrapEvent(showData, f):
     f.write(iCalEventBegin + '\n')
     f.write((iCalCreated + printShowDataDateZulu(todaysDateData)) + '\n')
     f.write((iCalDescription + showData["text"] + iCalDescriptionLink + showData["link"]) + '\n')
+    f.write(iCaldtStart + printShowDataDateZulu(showData) + '\n')
     f.write(iCaldtEnd + printShowDataDateZulu(showData) + '\n')
-    f.write(iCaldtStamp + printShowDataDateZulu(showData) + '\n')
     f.write(iCaldtStamp + printShowDataDateZulu(showData) + '\n')
     f.write(iCalLocation + showData["loc"] + '\n')
     f.write(iCalSequence + '\n') 
@@ -76,8 +76,16 @@ def wrapEventConsole(showData):
     print(iCalEventEnd.encode("ASCII"))
 
 def printShowDataDateZulu(date):
-    if date["date"].month  < 10:
+    #if month and day are both less than 10
+    if date["date"].month < 10 and date["date"].day  < 10:
+        return str(date["date"].year) + "0" + str(date["date"].month) + '0' + str(date["date"].day) + "T000000Z"
+    #if month < 10 but day > 10
+    if date["date"].month  < 10 and date["date"].day  > 10:
         return str(date["date"].year) + "0" + str(date["date"].month) + str(date["date"].day) + "T000000Z"
+    #if month >10 but day <10
+    if date["date"].month  > 10 and date["date"].day  < 10:
+        return str(date["date"].year) + str(date["date"].month) + '0' + str(date["date"].day) + "T000000Z"
+    #if both month and day > 10
     return str(date["date"].year) + str(date["date"].month) + str(date["date"].day) + "T000000Z"
 
 def main():
@@ -126,7 +134,8 @@ def test():
                     showData["date"] = dateparser.parse(eventDate[0])
                     showData["link"] = " "
                     #showData["text"] = unidecode(p.a.string)
-                    showData["text"] = unidecode(p.text)
+                    showData["text"] = unidecode(p.text.replace("\n", "\\n"))
+                    #showDate["text"] = showData["text"].replace("\n", "\\n")
                     showData["loc"] = unidecode(eventLoc[len(eventLoc) -1])
                     if len(eventLoc[len(eventLoc) -1]) > 50:
                         showData["loc"] = "Check event details"
