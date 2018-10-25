@@ -21,7 +21,7 @@ monthsOfYear =  ['Jan',
 iCalFileLocationWin32 = "C:/Users/jhite/source/repos/NYCMetalCalendar/ical/nycmetalscene.ics"
 #iCalFileLocationMacOS = "\Users\jhite\Programming\ical\nycmetalscene\"
 
-iCalHeading = "BEGIN:VCALENDAR \nVERSION:2.0 \nPRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN"
+iCalHeading = "BEGIN:VCALENDAR\rVERSION:2.0 \rPRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN"
 
 iCalEventBegin = "BEGIN:VEVENT"
 iCalEventEnd = "END:VEVENT"
@@ -43,9 +43,6 @@ iCalFooter = "END:VCALENDAR"
 showData = {}
 todaysDateData = {"date" : dateparser.parse('today')}
 ###                     Variables End                  ###
-
-#TODO:
-#figure out file location differences between OSs
 
 def wrapEvent(showData, f):
     f.write(iCalEventBegin + '\n')
@@ -103,7 +100,7 @@ def main():
                 eventDate = p.text.split(':')
                 eventLoc = p.text.split(" at ")
                 #convert p.text into a dictionary containing event details to wrap.
-                #eventDate[0] contains the day i.e Fri Oct 19th 2018 TODO: convert to zulu
+                #eventDate[0] contains the day i.e Fri Oct 19th 2018 
                 showData["date"] = dateparser.parse(eventDate[0])
                 showData["link"] = p.a['href']
                 showData["text"] = p.a.string
@@ -113,12 +110,9 @@ def main():
             
                 wrapEventConsole(showData)
            
-            
-
-    #print (icalCount)
 def test():
     f = open(iCalFileLocationWin32, "w+")
-    f.write(iCalHeading + '\n')
+    f.write(iCalHeading + '\r')
     page = requests.get("http://nycmetalscene.com/")
     newPage = page.text.replace("Thurs.","Thu.")
     newSoup = BeautifulSoup(newPage, "html.parser")
