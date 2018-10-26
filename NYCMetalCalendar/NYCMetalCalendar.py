@@ -18,8 +18,7 @@ monthsOfYear =  ['Jan',
               'Nov',
               'Dec']
 
-iCalFileLocationWin32 = "C:/Users/jhite/source/repos/NYCMetalCalendar/ical/nycmetalscene.ics"
-#iCalFileLocationMacOS = "\Users\jhite\Programming\ical\nycmetalscene\"
+iCalFileLocationWin32 = "C:/Users/jhite/source/repos/NYCMetalCalendar/ical/nycmetalcal.ics"
 
 iCalHeading = "BEGIN:VCALENDAR\rVERSION:2.0 \rPRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN"
 
@@ -86,34 +85,10 @@ def printShowDataDateZulu(date):
     return str(date["date"].year) + str(date["date"].month) + str(date["date"].day) + "T000000Z"
 
 def main():
-    
-    page = requests.get("http://nycmetalscene.com/")
-    soup = BeautifulSoup(page.text, 'html.parser')
-
-
-    icalCount  = 0
-
-    for p in soup.find_all('p'):
-        for month in monthsOfYear: 
-            if month in p.text:
-                icalCount +=1
-                eventDate = p.text.split(':')
-                eventLoc = p.text.split(" at ")
-                #convert p.text into a dictionary containing event details to wrap.
-                #eventDate[0] contains the day i.e Fri Oct 19th 2018 
-                showData["date"] = dateparser.parse(eventDate[0])
-                showData["link"] = p.a['href']
-                showData["text"] = p.a.string
-                showData["loc"] = eventLoc[len(eventLoc) -1]
-                if len(eventLoc[len(eventLoc) -1]) > 50:
-                    showData["loc"] = "Check event details"
-            
-                wrapEventConsole(showData)
-           
-def test():
     f = open(iCalFileLocationWin32, "w+")
     f.write(iCalHeading + '\r')
-    page = requests.get("http://nycmetalscene.com/")
+    url = input('Enter the url of the site: ')
+    page = requests.get(url)
     newPage = page.text.replace("Thurs.","Thu.")
     newSoup = BeautifulSoup(newPage, "html.parser")
     for p in newSoup.find_all('p'):
@@ -122,25 +97,21 @@ def test():
             eventLoc = p.text.split(" at ")
             if month in p.text:
                 if dateparser.parse(eventDate[0]):
-                
                     #convert p.text into a dictionary containing event details to wrap.
-                    #eventDate[0] contains the day i.e Fri Oct 19th 2018 TODO: convert to zulu
+                    #eventDate[0] contains the day i.e Fri Oct 19th 2018 
                     showData["date"] = dateparser.parse(eventDate[0])
                     showData["link"] = " "
-                    #showData["text"] = unidecode(p.a.string)
                     showData["text"] = unidecode(p.text.replace("\n", "\\n"))
-                    #showDate["text"] = showData["text"].replace("\n", "\\n")
                     showData["loc"] = unidecode(eventLoc[len(eventLoc) -1])
                     if len(eventLoc[len(eventLoc) -1]) > 50:
                         showData["loc"] = "Check event details"
+                    #some events didn't have links, so the below code checks for a link
                     if p.a:
                         if p.a['href']:
                             showData["link"] = p.a['href']
-                        
-            
                     wrapEvent(showData, f)
     f.write(iCalFooter)
     f.close()
-test()
+main()
 
 
