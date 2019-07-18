@@ -88,7 +88,7 @@ def main():
     f = open(iCalFileLocationWin32, "w+")
     f.write(iCalHeading + '\r')
     url = input('Enter the url of the site: ')
-    page = requests.get(url)
+    page = requests.get(url, headers={"User-Agent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36"})
     newPage = page.text.replace("Thurs.","Thu.")
     newSoup = BeautifulSoup(newPage, "html.parser")
     for p in newSoup.find_all('p'):
